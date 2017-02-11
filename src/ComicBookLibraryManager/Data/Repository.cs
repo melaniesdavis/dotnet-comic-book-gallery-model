@@ -150,7 +150,7 @@ namespace ComicBookLibraryManager.Data
                         context.Entry(artist.Artist).State = EntityState.Unchanged;
                     }
 
-                    if (artist.Role != null && artist.Role > 0)
+                    if (artist.Role != null && artist.Role.Id > 0)
                     {
                         context.Entry(artist.Role).State = EntityState.Unchanged;
                     }
@@ -166,7 +166,28 @@ namespace ComicBookLibraryManager.Data
         /// <param name="comicBook">The ComicBook entity instance to update.</param>
         public static void UpdateComicBook(ComicBook comicBook)
         {
-            // TODO
+            using (Context context = GetContext())
+            {
+                {
+                    //ComicBook comicBookToUpdate = context.ComicBooks.Find(comicBook.Id);
+
+                    ////comicBookToUpdate.SeriesId = comicBook.SeriesId;
+                    ////comicBookToUpdate.IssueNumber = comicBook.IssueNumber;
+                    ////comicBookToUpdate.Description = comicBook.Description;
+                    ////comicBookToUpdate.PublishedOn = comicBook.PublishedOn;
+                    ////comicBookToUpdate.AverageRating = comicBook.AverageRating;
+
+                    //context.Entry(comicBookToUpdate).CurrentValues.SetValues(comicBook);
+
+                    context.ComicBooks.Attach(comicBook);
+                    var comicBookEntry = context.Entry(comicBook);
+                    comicBookEntry.State = EntityState.Modified;
+                    //comicBookEntry.Property("IssueNumber").IsModified = false;
+
+                    context.SaveChanges();
+                    
+                }
+            }
         }
 
         /// <summary>
@@ -175,7 +196,17 @@ namespace ComicBookLibraryManager.Data
         /// <param name="comicBookId">The comic book ID to delete.</param>
         public static void DeleteComicBook(int comicBookId)
         {
-            // TODO
+            using (Context context = GetContext())
+            {
+                //ComicBook comicBook = context.ComicBooks.Find(comicBookId);
+
+                //context.ComicBooks.Remove(comicBook);
+
+                var comicBook = new ComicBook() { Id = comicBookId };
+                context.Entry(comicBook).State = EntityState.Deleted;
+
+                context.SaveChanges();
+            }
         }
     }
 }
